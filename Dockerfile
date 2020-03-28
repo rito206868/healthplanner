@@ -1,5 +1,5 @@
 FROM openjdk:8-jre-alpine
-ENV APP_FILE uinstub-0.0.1-SNAPSHOT.jar
+ENV APP_FILE healthplanner-0.0.1-SNAPSHOT
 ENV APP_HOME /usr/app
 COPY target/$APP_FILE $APP_HOME/
 WORKDIR $APP_HOME
