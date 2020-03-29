@@ -38,7 +38,7 @@ objects:
     output:
       to:
         kind: "ImageStreamTag"
-        name: "healthplanner-backend"
+        name: "healthplanner-backend:latest"
 
 - apiVersion: v1
   kind: ImageStream
