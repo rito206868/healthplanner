@@ -28,7 +28,7 @@ objects:
     runPolicy: "Serial"
     source:
       git:
-        uri: "${APPLICATION_CODEBASE_GIT_REPO}
+        uri: "${APPLICATION_CODEBASE_GIT_REPO}"
     strategy:
       sourceStrategy:
         from:
