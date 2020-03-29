@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Template
+labels:
+  template: haealth-planner-backend-build-template
+message: Defines a source strategy build config
+metadata:
+  annotations:
+    openshift.io/display-name: HealthPlanner Backend Source Strategy Build Config
+    description: Defines a source strategy build config
+    iconClass: icon-jenkins
+    tags: instant-app,jenkins
+  name: haealth-planner-backend-build-template
+parameters:
+- description: The GIT Url for healthplanner backend codebase
+  displayName: Codebase URL
+  name: APPLICATION_CODEBASE_GIT_REPO
+  required: true
+
+objects:
+
+- apiVersion: v1
+  kind: "BuildConfig"
+  metadata:
+    name: "health-planner-backend-source-to-image-build"
+    labels:
+      app: "healthplanner-backend"
+  spec:
+    runPolicy: "Serial"
+    source:
+      git:
+        uri: "${APPLICATION_CODEBASE_GIT_REPO}"
+    strategy:
+      sourceStrategy:
+        from:
+          kind: "ImageStreamTag"
+          name: "openjdk18-openshift:latest"
+        incremental: true
+    output:
+      to:
+        kind: "ImageStreamTag"
+        name: "healthplanner-backend"
+
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    labels:
+      app: healthplanner-backend
+    name: healthplanner-backend

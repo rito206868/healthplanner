@@ -1,0 +1,36 @@
+try {
+    timeout(time: 20, unit: 'MINUTES') {
+        node('maven') {
+        	
+            stage('Java Build') {
+            	
+                //checkout application codebase
+                git(url:"${APPLICATION_CODEBASE_GIT_REPO}"
+                        , branch:"${BRANCH_NAME}",
+                        credentialsId:'health-planner-github-repo-webhook-secret')
+                sh 'ls -lrst'
+				sh 'mvn clean package -DskipTests'
+                
+            }
+            
+            
+            stage('Build s2i Image') {
+            	
+                openshift.withCluster() {
+                    openshift.withProject() {
+                       
+                       	//  Run s2i Strategy Build for health planner backend Application
+                        openshift.apply(openshift.process("-f", "./build/health-planner-s2i-build-template.yaml", "-p", "APPLICATION_CODEBASE_GIT_REPO=${APPLICATION_CODEBASE_GIT_REPO}"))
+						openshift.startBuild("health-planner-backend-source-to-image-build", "--follow", "--wait")
+						
+                    }
+                }
+            }
+        }
+    }
+} catch (err) {
+    echo "in catch block"
+    echo "Caught: ${err}"
+    currentBuild.result = 'FAILURE'
+    throw err
+}    
