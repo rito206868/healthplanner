@@ -7,7 +7,7 @@ try {
                 //checkout application codebase
                 git(url:"${APPLICATION_CODEBASE_GIT_REPO}"
                         , branch:"${BRANCH_NAME}",
-                        credentialsId:"${NAMESPACE}-in-health-planner-github-repo-access-secret")
+                        credentialsId:"${NAMESPACE}-health-planner-github-repo-access-secret")
                 sh 'ls -lrst'
 				sh 'mvn clean package -DskipTests'
                 
